@@ -1,0 +1,59 @@
+Source: yajl
+Section: libs
+Priority: extra
+Maintainer: John Stamp <jstamp@users.sourceforge.net>
+Build-Depends: debhelper (>= 7), cmake, doxygen, quilt
+Standards-Version: 3.8.2
+Homepage: http://lloyd.github.com/yajl/
+Vcs-Browser: http://github.com/jstamp/yajl
+Vcs-Git: git://github.com/jstamp/yajl.git
+
+Package: libyajl1
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Yet Another JSON Library
+ A small, fast library for parsing JavaScript Object Notation (JSON) data
+ streams.
+
+Package: libyajl-dev
+Section: libdevel
+Architecture: any
+Depends: libyajl1 (= ${binary:Version})
+Description: Yet Another JSON Library - development files
+ A small, fast library for parsing JavaScript Object Notation (JSON) data
+ streams.
+ .
+ This package contains the header files and static libraries needed for
+ compiling software that uses the yajl library.
+
+Package: libyajl-doc
+Architecture: all
+Section: doc
+Description: Yet Another JSON Library - library documentation
+ A small, fast library for parsing JavaScript Object Notation (JSON) data
+ streams.
+ .
+ This package contains the API documentation.
+
+Package: libyajl1-dbg
+Architecture: any
+Section: debug
+Depends: libyajl1 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Yet Another JSON Library - library documentation
+ A small, fast library for parsing JavaScript Object Notation (JSON) data
+ streams.
+ .
+ This package contains the debugging symbols for libyajl1 and the utilities
+ in yajl-tools.
+
+Package: yajl-tools
+Architecture: any
+Section: utils
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Yet Another JSON Library - tools
+ A small collection of tools that use the yajl library.
+ .
+ Current tools are:
+  json_reformat - beautifies or minimizes format of JSON data
+  json_verify - validates JSON data

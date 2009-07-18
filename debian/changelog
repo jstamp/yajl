@@ -1,0 +1,5 @@
+yajl (1.0.5.dfsg-1) UNRELEASED; urgency=low
+
+  * Initial release (Closes: #537199)
+
+ -- John Stamp <jstamp@users.sourceforge.net>  Wed, 15 Jul 2009 19:35:46 -0700

@@ -1,0 +1,7 @@
+yajl for Debian
+---------------
+
+The following non-free files were removed from the upstream source tarball:
+  rfc4627.txt
+
+ -- John Stamp <jstamp@users.sourceforge.net>  Wed, 15 Jul 2009 19:39.26 -0700
