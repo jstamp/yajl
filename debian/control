@@ -44,8 +44,7 @@ Description: Yet Another JSON Library - library documentation
  A small, fast library for parsing JavaScript Object Notation (JSON) data
  streams.
  .
- This package contains the debugging symbols for libyajl1 and the utilities
- in yajl-tools.
+ This package contains the debugging symbols for libyajl1.
 
 Package: yajl-tools
 Architecture: any
