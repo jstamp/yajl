@@ -40,7 +40,7 @@ Package: libyajl1-dbg
 Architecture: any
 Section: debug
 Depends: libyajl1 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: Yet Another JSON Library - library documentation
+Description: Yet Another JSON Library - debugging symbols
  A small, fast library for parsing JavaScript Object Notation (JSON) data
  streams.
  .
