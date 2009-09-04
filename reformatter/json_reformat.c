@@ -73,6 +73,14 @@ int reformat_string(void * ctx, const unsigned char * stringVal,
     return 1;
 }
 
+int reformat_comment(void * ctx, const unsigned char * stringVal,
+                     unsigned int stringLen)
+{
+    yajl_gen g = (yajl_gen) ctx;
+    yajl_gen_cpp_comment(g, stringVal, stringLen);
+    return 1;
+}
+
 int reformat_map_key(void * ctx, const unsigned char * stringVal,
                    unsigned int stringLen)
 {
@@ -116,6 +124,7 @@ static yajl_callbacks callbacks = {
     reformat_integer,
     reformat_double,
     reformat_string,
+    reformat_comment,
     reformat_start_map,
     reformat_map_key,
     reformat_end_map,
