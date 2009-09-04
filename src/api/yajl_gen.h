@@ -80,7 +80,7 @@ extern "C" {
     void YAJL_API yajl_gen_free(yajl_gen handle);
 
     yajl_gen_status YAJL_API yajl_gen_integer(yajl_gen hand,
-                                              longlong number);
+                                              long long int number);
     yajl_gen_status YAJL_API yajl_gen_double(yajl_gen hand, double number);
     yajl_gen_status YAJL_API yajl_gen_string(yajl_gen hand,
                                              const unsigned char * str,

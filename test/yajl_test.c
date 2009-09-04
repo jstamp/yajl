@@ -51,13 +51,9 @@ int test_yajl_boolean(void * ctx, int boolVal)
     return 1;
 }
 
-int test_yajl_integer(void *ctx, longlong integerVal)
+int test_yajl_integer(void *ctx, long long integerVal)
 {
-#ifdef NT
-    printf("integer: %I64d\n", integerVal);
-#else
     printf("integer: %lld\n", integerVal);
-#endif
     return 1;
 }
 

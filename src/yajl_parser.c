@@ -226,7 +226,7 @@ yajl_do_parse(yajl_handle hand, unsigned int * offset,
                      * so we're safe.
                      */
                     if (hand->callbacks && hand->callbacks->yajl_integer) {
-                        longlong i = 0;
+                        long long int i = 0;
                         int neg = 0;
                         yajl_buf_clear(hand->decodeBuf);
                         yajl_buf_append(hand->decodeBuf, buf, bufLen);
@@ -234,11 +234,7 @@ yajl_do_parse(yajl_handle hand, unsigned int * offset,
                         if (*buf == '-') {
                             buf++; neg = 1;
                         }
-#ifdef NT
-                        sscanf((char *) buf, "%I64d", &i);
-#else
                         sscanf((char *) buf, "%lld", &i);
-#endif
                         if (neg) i -= (i<<1);
                         _CC_CHK(hand->callbacks->yajl_integer(hand->ctx, i));
                     }
