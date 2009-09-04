@@ -1,4 +1,4 @@
-# Copyright 2007, Lloyd Hilaiel.
+# Copyright 2007-2009, Lloyd Hilaiel.
 # 
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -28,16 +28,18 @@
 # IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+
 PROJECT(YetAnotherJSONParser)
 
-SET (YAJL_MAJOR 0)
-SET (YAJL_MINOR 3)
-SET (YAJL_MICRO 0)
+SET (YAJL_MAJOR 1)
+SET (YAJL_MINOR 0)
+SET (YAJL_MICRO 6)
 
 SET (YAJL_DIST_NAME "yajl-${YAJL_MAJOR}.${YAJL_MINOR}.${YAJL_MICRO}")
 
 IF (NOT CMAKE_BUILD_TYPE)
-  SET(CMAKE_BUILD_TYPE "Debug")
+  SET(CMAKE_BUILD_TYPE "Release")
 ENDIF (NOT CMAKE_BUILD_TYPE)
 
 SET(CMAKE_C_FLAGS "-Wall")
@@ -58,9 +60,11 @@ IF (WIN32)
   SET(CMAKE_C_FLAGS_DEBUG "/D DEBUG /Od /Z7")
   SET(CMAKE_C_FLAGS_RELEASE "/D NDEBUG /O2")
 ELSE (WIN32)
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -ansi")
+  SET(CMAKE_C_FLAGS
+      "${CMAKE_C_FLAGS} -fPIC -ansi -pedantic -Wpointer-arith -Wno-format-y2k -Wstrict-prototypes -Wmissing-declarations -Wnested-externs -Wextra	-Wundef -Wwrite-strings -Wold-style-definition -Wno-missing-field-initializers -Wredundant-decls -Wno-unused-parameter -Wno-sign-compare -Wmissing-prototypes")
+
   SET(CMAKE_C_FLAGS_DEBUG "-DDEBUG -g")
-  SET(CMAKE_C_FLAGS_RELEASE "-DNDEBUG -O2")
+  SET(CMAKE_C_FLAGS_RELEASE "-DNDEBUG -O2 -Wuninitialized")
 ENDIF (WIN32) 
 
 
@@ -75,3 +79,4 @@ INCLUDE(YAJLDoc.cmake)
 ADD_CUSTOM_TARGET(test
                   ./run_tests.sh
                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test)
+

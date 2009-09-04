@@ -1,4 +1,4 @@
-# Copyright 2007, Lloyd Hilaiel.
+# Copyright 2007-2009, Lloyd Hilaiel.
 # 
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -49,3 +49,7 @@ GET_TARGET_PROPERTY(binPath json_verify LOCATION)
 
 ADD_CUSTOM_COMMAND(TARGET json_verify POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binPath} ${binDir})
+
+IF (NOT WIN32)
+  INSTALL(TARGETS json_verify RUNTIME DESTINATION bin)
+ENDIF ()

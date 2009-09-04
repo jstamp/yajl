@@ -1,5 +1,5 @@
 /*
- * Copyright 2007, Lloyd Hilaiel.
+ * Copyright 2007-2009, Lloyd Hilaiel.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -37,43 +37,36 @@
 #include <stdlib.h>
 #include <string.h>
 
-int reformat_null(void * ctx)
+static int reformat_null(void * ctx)
 {
     yajl_gen g = (yajl_gen) ctx;
     yajl_gen_null(g);
     return 1;
 }
 
-int reformat_boolean(void * ctx, int boolVal)
+static int reformat_boolean(void * ctx, int boolean)
 {
     yajl_gen g = (yajl_gen) ctx;
-    yajl_gen_bool(g, boolVal);
+    yajl_gen_bool(g, boolean);
     return 1;
 }
 
-int reformat_integer(void * ctx, long long integerVal)
+static int reformat_number(void * ctx, const char * s, unsigned int l)
 {
     yajl_gen g = (yajl_gen) ctx;
-    yajl_gen_integer(g, integerVal);
+    yajl_gen_number(g, s, l);
     return 1;
 }
 
-int reformat_double(void * ctx, double doubleVal)
-{
-    yajl_gen g = (yajl_gen) ctx;
-    yajl_gen_double(g, doubleVal);
-    return 1;
-}
-
-int reformat_string(void * ctx, const unsigned char * stringVal,
-                     unsigned int stringLen)
+static int reformat_string(void * ctx, const unsigned char * stringVal,
+                           unsigned int stringLen)
 {
     yajl_gen g = (yajl_gen) ctx;
     yajl_gen_string(g, stringVal, stringLen);
     return 1;
 }
 
-int reformat_comment(void * ctx, const unsigned char * stringVal,
+static int reformat_comment(void * ctx, const unsigned char * stringVal,
                      unsigned int stringLen)
 {
     yajl_gen g = (yajl_gen) ctx;
@@ -81,15 +74,15 @@ int reformat_comment(void * ctx, const unsigned char * stringVal,
     return 1;
 }
 
-int reformat_map_key(void * ctx, const unsigned char * stringVal,
-                   unsigned int stringLen)
+static int reformat_map_key(void * ctx, const unsigned char * stringVal,
+                            unsigned int stringLen)
 {
     yajl_gen g = (yajl_gen) ctx;
     yajl_gen_string(g, stringVal, stringLen);
     return 1;
 }
 
-int reformat_start_map(void * ctx)
+static int reformat_start_map(void * ctx)
 {
     yajl_gen g = (yajl_gen) ctx;
     yajl_gen_map_open(g);
@@ -97,21 +90,21 @@ int reformat_start_map(void * ctx)
 }
 
 
-int reformat_end_map(void * ctx)
+static int reformat_end_map(void * ctx)
 {
     yajl_gen g = (yajl_gen) ctx;
     yajl_gen_map_close(g);
     return 1;
 }
 
-int reformat_start_array(void * ctx)
+static int reformat_start_array(void * ctx)
 {
     yajl_gen g = (yajl_gen) ctx;
     yajl_gen_array_open(g);
     return 1;
 }
 
-int reformat_end_array(void * ctx)
+static int reformat_end_array(void * ctx)
 {
     yajl_gen g = (yajl_gen) ctx;
     yajl_gen_array_close(g);
@@ -121,8 +114,9 @@ int reformat_end_array(void * ctx)
 static yajl_callbacks callbacks = {
     reformat_null,
     reformat_boolean,
-    reformat_integer,
-    reformat_double,
+    NULL,
+    NULL,
+    reformat_number,
     reformat_string,
     reformat_comment,
     reformat_start_map,
@@ -155,7 +149,8 @@ main(int argc, char ** argv)
     size_t rd;
     /* allow comments */
     yajl_parser_config cfg = { 1, 1 };
-
+    int done = 0;
+    
     /* check arguments.  We expect exactly one! */
     if (argc == 2) {
         if (!strcmp("-m", argv[1])) {
@@ -170,39 +165,42 @@ main(int argc, char ** argv)
         usage(argv[0]);
     }
     
-    g = yajl_gen_alloc(&conf);
+    g = yajl_gen_alloc(&conf, NULL);
 
     /* ok.  open file.  let's read and parse */
-    hand = yajl_alloc(&callbacks, &cfg, (void *) g);
+    hand = yajl_alloc(&callbacks, &cfg, NULL, (void *) g);
         
-    for (;;) {
+	while (!done) {
         rd = fread((void *) fileData, 1, sizeof(fileData) - 1, stdin);
         
         if (rd == 0) {
-            if (feof(stdin)) {
-                break;
-            } else {
+            if (!feof(stdin)) {
                 fprintf(stderr, "error on file read.\n");
                 break;
             }
-        } else {
-            fileData[rd] = 0;
-            
+            done = 1;
+        }
+        fileData[rd] = 0;
+        
+        if (done)
+            /* parse any remaining buffered data */
+            stat = yajl_parse_complete(hand);
+        else
             /* read file data, pass to parser */
             stat = yajl_parse(hand, fileData, rd);
-            if (stat != yajl_status_ok &&
-                stat != yajl_status_insufficient_data)
-            {
-                unsigned char * str = yajl_get_error(hand, 1, fileData, rd);
-                fprintf(stderr, (const char *) str);
-                yajl_free_error(str);
-            } else {
-                const unsigned char * buf;
-                unsigned int len;
-                yajl_gen_get_buf(g, &buf, &len);
-                fwrite(buf, 1, len, stdout);
-                yajl_gen_clear(g);
-            }
+
+        if (stat != yajl_status_ok &&
+            stat != yajl_status_insufficient_data)
+        {
+            unsigned char * str = yajl_get_error(hand, 1, fileData, rd);
+            fprintf(stderr, (const char *) str);
+            yajl_free_error(hand, str);
+        } else {
+            const unsigned char * buf;
+            unsigned int len;
+            yajl_gen_get_buf(g, &buf, &len);
+            fwrite(buf, 1, len, stdout);
+            yajl_gen_clear(g);
         }
     }
 

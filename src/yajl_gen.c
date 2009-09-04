@@ -1,5 +1,5 @@
 /*
- * Copyright 2007, Lloyd Hilaiel.
+ * Copyright 2007-2009, Lloyd Hilaiel.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -59,18 +59,39 @@ struct yajl_gen_t
 	unsigned char *pendingComment;
 	unsigned int pendingLen;			/* Length of pending comment */
 	int pendingCpp;				/* NZ if comment is C++ style, Z if C */
+    /* memory allocation routines */
+    yajl_alloc_funcs alloc;
 };
 
 yajl_gen
-yajl_gen_alloc(const yajl_gen_config * config)
+yajl_gen_alloc(const yajl_gen_config * config,
+               const yajl_alloc_funcs * afs)
 {
-    yajl_gen g = (yajl_gen) malloc(sizeof(struct yajl_gen_t));
+    yajl_gen g = NULL;
+    yajl_alloc_funcs afsBuffer;
+
+    /* first order of business is to set up memory allocation routines */
+    if (afs != NULL) {
+        if (afs->malloc == NULL || afs->realloc == NULL || afs->free == NULL)
+        {
+            return NULL;
+        }
+    } else {
+        yajl_set_default_alloc_funcs(&afsBuffer);
+        afs = &afsBuffer;
+    }
+
+    g = (yajl_gen) YA_MALLOC(afs, sizeof(struct yajl_gen_t));
     memset((void *) g, 0, sizeof(struct yajl_gen_t));
+    /* copy in pointers to allocation routines */
+    memcpy((void *) &(g->alloc), (void *) afs, sizeof(yajl_alloc_funcs));
+
     if (config) {
         g->pretty = config->beautify;
         g->indentString = config->indentString ? config->indentString : "  ";
     }
-    g->buf = yajl_buf_alloc();
+    g->buf = yajl_buf_alloc(&(g->alloc));
+
     return g;
 }
 
@@ -78,7 +99,7 @@ void
 yajl_gen_free(yajl_gen g)
 {
     yajl_buf_free(g->buf);
-    free(g);
+    YA_FREE(&(g->alloc), g);
 }
 
 #define INSERT_EOL												\
@@ -98,8 +119,8 @@ yajl_gen_free(yajl_gen g)
 #define INSERT_WHITESPACE                                               \
     if (g->pretty) {                                                    \
         if (g->state[g->depth] != yajl_gen_map_val) {                   \
-            unsigned int i;                                             \
-            for (i=0;i<g->depth;i++)                                    \
+            unsigned int _i;                                            \
+            for (_i=0;_i<g->depth;_i++)                                 \
                 yajl_buf_append(g->buf, g->indentString,                \
                                 strlen(g->indentString));               \
         }                                                               \
@@ -194,11 +215,11 @@ yajl_gen g, const unsigned char * str, unsigned int len, int cpp) {
 }
 
 yajl_gen_status
-yajl_gen_integer(yajl_gen g, long long int number)
+yajl_gen_integer(yajl_gen g, long int number)
 {
     char i[32];
     ENSURE_VALID_STATE; ENSURE_NOT_KEY; INSERT_SEP; INSERT_WHITESPACE;
-    sprintf(i, "%lld", number);
+    sprintf(i, "%ld", number);
     yajl_buf_append(g->buf, i, strlen(i));
     APPENDED_ATOM;
     FINAL_NEWLINE;
@@ -210,9 +231,20 @@ yajl_gen_double(yajl_gen g, double number)
 {
     char i[32];
     ENSURE_VALID_STATE; ENSURE_NOT_KEY; INSERT_SEP; INSERT_WHITESPACE;
-    sprintf(i, "%lf", number);
+    sprintf(i, "%g", number);
     yajl_buf_append(g->buf, i, strlen(i));
     APPENDED_ATOM;
+    FINAL_NEWLINE;
+    return yajl_gen_status_ok;
+}
+
+yajl_gen_status
+yajl_gen_number(yajl_gen g, const char * s, unsigned int l)
+{
+    ENSURE_VALID_STATE; ENSURE_NOT_KEY; INSERT_SEP; INSERT_WHITESPACE;
+    yajl_buf_append(g->buf, s, l);
+    APPENDED_ATOM;
+    FINAL_NEWLINE;
     return yajl_gen_status_ok;
 }
 
