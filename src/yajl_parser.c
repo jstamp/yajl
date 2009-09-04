@@ -167,6 +167,13 @@ yajl_do_parse(yajl_handle hand, unsigned int * offset,
                 case yajl_tok_error:
                     yajl_state_set(hand, yajl_state_lexical_error);
                     goto around_again;
+                case yajl_tok_c_comment:
+                case yajl_tok_cpp_comment:
+                    if (hand->callbacks && hand->callbacks->yajl_comment) {
+                        _CC_CHK(hand->callbacks->yajl_comment(hand->ctx,
+                                                             buf, bufLen));
+                    }
+                    goto around_again;
                 case yajl_tok_string:
                     if (hand->callbacks && hand->callbacks->yajl_string) {
                         _CC_CHK(hand->callbacks->yajl_string(hand->ctx,
@@ -219,7 +226,7 @@ yajl_do_parse(yajl_handle hand, unsigned int * offset,
                      * so we're safe.
                      */
                     if (hand->callbacks && hand->callbacks->yajl_integer) {
-                        long long int i = 0;
+                        longlong i = 0;
                         int neg = 0;
                         yajl_buf_clear(hand->decodeBuf);
                         yajl_buf_append(hand->decodeBuf, buf, bufLen);
@@ -227,7 +234,11 @@ yajl_do_parse(yajl_handle hand, unsigned int * offset,
                         if (*buf == '-') {
                             buf++; neg = 1;
                         }
+#ifdef NT
+                        sscanf((char *) buf, "%I64d", &i);
+#else
                         sscanf((char *) buf, "%lld", &i);
+#endif
                         if (neg) i -= (i<<1);
                         _CC_CHK(hand->callbacks->yajl_integer(hand->ctx, i));
                     }
@@ -316,6 +327,13 @@ yajl_do_parse(yajl_handle hand, unsigned int * offset,
                     }
                     yajl_state_set(hand, yajl_state_map_sep);
                     goto around_again;
+                case yajl_tok_c_comment:
+                case yajl_tok_cpp_comment:
+                    if (hand->callbacks && hand->callbacks->yajl_comment) {
+                        _CC_CHK(hand->callbacks->yajl_comment(hand->ctx,
+                                                             buf, bufLen));
+                    }
+                    goto around_again;
                 case yajl_tok_right_bracket:
                     if (yajl_state_current(hand) == yajl_state_map_start) {
                         if (hand->callbacks && hand->callbacks->yajl_end_map) {
@@ -335,6 +353,13 @@ yajl_do_parse(yajl_handle hand, unsigned int * offset,
             tok = yajl_lex_lex(hand->lexer, jsonText, jsonTextLen,
                                offset, &buf, &bufLen);
             switch (tok) {
+                case yajl_tok_c_comment:
+                case yajl_tok_cpp_comment:
+                    if (hand->callbacks && hand->callbacks->yajl_comment) {
+                        _CC_CHK(hand->callbacks->yajl_comment(hand->ctx,
+                                                             buf, bufLen));
+                    }
+                    goto around_again;
                 case yajl_tok_colon:
                     yajl_state_set(hand, yajl_state_map_need_val);
                     goto around_again;                    
@@ -354,6 +379,13 @@ yajl_do_parse(yajl_handle hand, unsigned int * offset,
             tok = yajl_lex_lex(hand->lexer, jsonText, jsonTextLen,
                                offset, &buf, &bufLen);
             switch (tok) {
+                case yajl_tok_c_comment:
+                case yajl_tok_cpp_comment:
+                    if (hand->callbacks && hand->callbacks->yajl_comment) {
+                        _CC_CHK(hand->callbacks->yajl_comment(hand->ctx,
+                                                             buf, bufLen));
+                    }
+                    goto around_again;
                 case yajl_tok_right_bracket:
                     if (hand->callbacks && hand->callbacks->yajl_end_map) {
                         _CC_CHK(hand->callbacks->yajl_end_map(hand->ctx));
@@ -382,6 +414,13 @@ yajl_do_parse(yajl_handle hand, unsigned int * offset,
             tok = yajl_lex_lex(hand->lexer, jsonText, jsonTextLen,
                                offset, &buf, &bufLen);
             switch (tok) {
+                case yajl_tok_c_comment:
+                case yajl_tok_cpp_comment:
+                    if (hand->callbacks && hand->callbacks->yajl_comment) {
+                        _CC_CHK(hand->callbacks->yajl_comment(hand->ctx,
+                                                             buf, bufLen));
+                    }
+                    goto around_again;
                 case yajl_tok_right_brace:
                     if (hand->callbacks && hand->callbacks->yajl_end_array) {
                         _CC_CHK(hand->callbacks->yajl_end_array(hand->ctx));
@@ -397,6 +436,7 @@ yajl_do_parse(yajl_handle hand, unsigned int * offset,
                     yajl_state_set(hand, yajl_state_lexical_error);
                     goto around_again;
                 default:
+printf("~1 tok = %d, comments = %d, %d\n",tok,yajl_tok_c_comment,yajl_tok_cpp_comment);
                     yajl_state_set(hand, yajl_state_parse_error);
                     hand->parseError =
                         "after array element, I expect ',' or ']'";

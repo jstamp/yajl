@@ -57,6 +57,8 @@ tokToStr(yajl_tok tok)
         case yajl_tok_right_bracket: return "bracket";
         case yajl_tok_string: return "string";
         case yajl_tok_string_with_escapes: return "string_with_escapes";
+    	case yajl_tok_c_comment: return "C comment";
+    	case yajl_tok_cpp_comment: return "C++ comment";
     }
     return "unknown";
 }
@@ -440,19 +442,21 @@ yajl_lex_comment(yajl_lexer lexer, const unsigned char * jsonText,
 {
     unsigned char c;
 
-    yajl_tok tok = yajl_tok_comment;
+    yajl_tok tok;
 
     RETURN_IF_EOF;    
     c = readChar(lexer, jsonText, offset);
 
     /* either slash or star expected */
     if (c == '/') {
+	    tok = yajl_tok_cpp_comment;
         /* now we throw away until end of line */
         do {
             RETURN_IF_EOF;    
             c = readChar(lexer, jsonText, offset); 
         } while (c != '\n');
     } else if (c == '*') {
+	    tok = yajl_tok_c_comment;
         /* now we throw away until end of comment */        
         for (;;) {
             RETURN_IF_EOF;    
@@ -604,14 +608,9 @@ yajl_lex_lex(yajl_lexer lexer, const unsigned char * jsonText,
                  * - eof hit. (tok_eof) */
                 tok = yajl_lex_comment(lexer, (unsigned char *) jsonText,
                                        jsonTextLen, context);
-                if (tok == yajl_tok_comment) {
-                    /* "error" is silly, but that's the initial
-                     * state of tok.  guilty until proven innocent. */  
-                    tok = yajl_tok_error;
-                    yajl_buf_clear(lexer->buf);
-                    lexer->bufInUse = 0;
-                    startCtx = *context; 
-                    break;
+                if (tok == yajl_tok_c_comment
+                 || tok == yajl_tok_cpp_comment) {
+	                goto lexed;
                 }
                 /* hit error or eof, bail */
                 goto lexed;
@@ -650,6 +649,22 @@ yajl_lex_lex(yajl_lexer lexer, const unsigned char * jsonText,
         *outLen -= 2; 
     }
 
+    /* remove comment delimeters */
+    if (tok == yajl_tok_c_comment) 
+    {
+        assert(*outLen >= 4);
+        (*outBuf)+= 2;
+        *outLen -= 4; 
+    }
+    if (tok == yajl_tok_cpp_comment) 
+    {
+        assert(*outLen >= 2);
+        (*outBuf)+= 2;
+        *outLen -= 2; 
+
+		if (*outLen >= 1 && (*outBuf)[(*outLen)-1] == 0x0a)
+	        *outLen -= 1; 
+    }
 
 #ifdef YAJL_LEXER_DEBUG
     if (tok == yajl_tok_error) {

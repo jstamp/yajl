@@ -80,7 +80,7 @@ extern "C" {
     void YAJL_API yajl_gen_free(yajl_gen handle);
 
     yajl_gen_status YAJL_API yajl_gen_integer(yajl_gen hand,
-                                              long long int number);
+                                              longlong number);
     yajl_gen_status YAJL_API yajl_gen_double(yajl_gen hand, double number);
     yajl_gen_status YAJL_API yajl_gen_string(yajl_gen hand,
                                              const unsigned char * str,
@@ -91,6 +91,12 @@ extern "C" {
     yajl_gen_status YAJL_API yajl_gen_map_close(yajl_gen hand);
     yajl_gen_status YAJL_API yajl_gen_array_open(yajl_gen hand);
     yajl_gen_status YAJL_API yajl_gen_array_close(yajl_gen hand);
+    yajl_gen_status YAJL_API yajl_gen_c_comment(yajl_gen hand,
+                                             const unsigned char * str,
+                                             unsigned int len, int dlytoeol);
+    yajl_gen_status YAJL_API yajl_gen_cpp_comment(yajl_gen hand,
+                                             const unsigned char * str,
+                                             unsigned int len);
 
     /** access the null terminated generator buffer.  If incrementally
      *  outputing JSON, one should call yajl_gen_clear to clear the

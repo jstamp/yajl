@@ -51,9 +51,13 @@ int test_yajl_boolean(void * ctx, int boolVal)
     return 1;
 }
 
-int test_yajl_integer(void *ctx, long long integerVal)
+int test_yajl_integer(void *ctx, longlong integerVal)
 {
+#ifdef NT
+    printf("integer: %I64d\n", integerVal);
+#else
     printf("integer: %lld\n", integerVal);
+#endif
     return 1;
 }
 
@@ -69,6 +73,17 @@ int test_yajl_string(void *ctx, const unsigned char * stringVal,
     printf("string: '");
     fwrite(stringVal, 1, stringLen, stdout);
     printf("'\n");    
+    return 1;
+}
+
+int test_yajl_comment(void *ctx, const unsigned char * stringVal,
+                     unsigned int stringLen)
+{
+#ifdef NEVER		/* Test don't expect comments */
+    printf("comment: '");
+    fwrite(stringVal, 1, stringLen, stdout);
+    printf("'\n");    
+#endif
     return 1;
 }
 
@@ -114,6 +129,7 @@ static yajl_callbacks callbacks = {
     test_yajl_integer,
     test_yajl_double,
     test_yajl_string,
+    test_yajl_comment,
     test_yajl_start_map,
     test_yajl_map_key,
     test_yajl_end_map,

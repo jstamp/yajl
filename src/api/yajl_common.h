@@ -35,6 +35,13 @@
 
 #define YAJL_MAX_DEPTH 128
 
+/* Detect machine/compiler specifics here */
+#if defined(NT)
+#define longlong __int64
+#else	/* !NT, assume standard */
+#define longlong long long
+#endif	/* !NT */
+
 /* msft dll export gunk.  To build a DLL on windows, you
  * must define WIN32, YAJL_SHARED, and YAJL_BUILD.  To use a shared
  * DLL, you must define YAJL_SHARED and WIN32 */

@@ -56,6 +56,9 @@ struct yajl_gen_t
     const char * indentString;
     yajl_gen_state state[YAJL_MAX_DEPTH];
     yajl_buf buf;
+	unsigned char *pendingComment;
+	unsigned int pendingLen;			/* Length of pending comment */
+	int pendingCpp;				/* NZ if comment is C++ style, Z if C */
 };
 
 yajl_gen
@@ -78,23 +81,35 @@ yajl_gen_free(yajl_gen g)
     free(g);
 }
 
+#define INSERT_EOL												\
+	if (g->pretty || g->pendingComment != NULL)					\
+		yajl_insert_eol(g);
+		
 #define INSERT_SEP \
     if (g->state[g->depth] == yajl_gen_map_key ||               \
         g->state[g->depth] == yajl_gen_in_array) {              \
         yajl_buf_append(g->buf, ",", 1);                        \
-        if (g->pretty) yajl_buf_append(g->buf, "\n", 1);        \
+        INSERT_EOL;												\
     } else if (g->state[g->depth] == yajl_gen_map_val) {        \
         yajl_buf_append(g->buf, ":", 1);                        \
         if (g->pretty) yajl_buf_append(g->buf, " ", 1);         \
    } 
 
-#define INSERT_WHITESPACE                                              \
+#define INSERT_WHITESPACE                                               \
     if (g->pretty) {                                                    \
         if (g->state[g->depth] != yajl_gen_map_val) {                   \
             unsigned int i;                                             \
             for (i=0;i<g->depth;i++)                                    \
                 yajl_buf_append(g->buf, g->indentString,                \
                                 strlen(g->indentString));               \
+        }                                                               \
+    }
+
+#define INSERT_SOME_WHITESPACE                                          \
+    if (g->pretty) {                                                    \
+        if (g->state[g->depth] != yajl_gen_map_val) {                   \
+			yajl_buf_append(g->buf, g->indentString,                	\
+                            strlen(g->indentString));               	\
         }                                                               \
     }
 
@@ -134,16 +149,60 @@ yajl_gen_free(yajl_gen g)
             break;                                  \
     }                                               \
 
-#define FINAL_NEWLINE                                        \
-    if (g->pretty && g->state[g->depth] == yajl_gen_complete) \
-        yajl_buf_append(g->buf, "\n", 1);        
+#define FINAL_NEWLINE                                       \
+    if (g->state[g->depth] == yajl_gen_complete) 			\
+        INSERT_EOL											\
     
+/* Insert an end of line, and take care of any */
+/* pending comments */
+static void yajl_insert_eol(yajl_gen g) {
+	if (g->pendingComment != NULL) {
+		INSERT_SOME_WHITESPACE;
+		if (g->pendingCpp)
+		    yajl_buf_append(g->buf, "//", 2);
+		else
+		    yajl_buf_append(g->buf, "/*", 2);
+	    yajl_string_encode(g->buf, g->pendingComment, g->pendingLen);
+		if (!g->pendingCpp)
+		    yajl_buf_append(g->buf, "*/", 2);
+		free(g->pendingComment);
+		g->pendingComment = NULL;
+		g->pendingLen = 0;
+		g->pendingCpp = 0;
+	}
+	yajl_buf_append(g->buf, "\n", 1);
+}
+
+/* Insert a comment at the end of the line. Append if there is already */
+/* one pending. */
+static void yajl_insert_pending_comment(
+yajl_gen g, const unsigned char * str, unsigned int len, int cpp) {
+	if (g->pendingComment != NULL) {
+		unsigned int tlen = g->pendingLen + 0 + len;
+		unsigned char *pendingComment;
+	    pendingComment = (unsigned char *) realloc(g->pendingComment, sizeof(char) * tlen);
+/*		pendingComment[g->pendingLen] = ' '; */
+		memcpy(pendingComment + g->pendingLen + 0, str, len);
+		g->pendingComment = pendingComment;
+		g->pendingLen = tlen;
+	} else {
+	    g->pendingComment = (unsigned char *) malloc(sizeof(char) * len);
+		memcpy(g->pendingComment, str, len);
+		g->pendingLen = len;
+	}
+	g->pendingCpp = cpp;
+}
+
 yajl_gen_status
-yajl_gen_integer(yajl_gen g, long long int number)
+yajl_gen_integer(yajl_gen g, longlong number)
 {
     char i[32];
     ENSURE_VALID_STATE; ENSURE_NOT_KEY; INSERT_SEP; INSERT_WHITESPACE;
+#ifdef NT
+    sprintf(i, "%I64d", number);
+#else
     sprintf(i, "%lld", number);
+#endif
     yajl_buf_append(g->buf, i, strlen(i));
     APPENDED_ATOM;
     FINAL_NEWLINE;
@@ -204,7 +263,7 @@ yajl_gen_map_open(yajl_gen g)
     
     g->state[g->depth] = yajl_gen_map_start;
     yajl_buf_append(g->buf, "{", 1);
-    if (g->pretty) yajl_buf_append(g->buf, "\n", 1);
+    INSERT_EOL;
     FINAL_NEWLINE;
     return yajl_gen_status_ok;
 }
@@ -214,7 +273,7 @@ yajl_gen_map_close(yajl_gen g)
 {
     ENSURE_VALID_STATE; 
     (g->depth)--;
-    if (g->pretty) yajl_buf_append(g->buf, "\n", 1);
+    INSERT_EOL;
     APPENDED_ATOM;
     INSERT_WHITESPACE;
     yajl_buf_append(g->buf, "}", 1);
@@ -229,7 +288,7 @@ yajl_gen_array_open(yajl_gen g)
     INCREMENT_DEPTH; 
     g->state[g->depth] = yajl_gen_array_start;
     yajl_buf_append(g->buf, "[", 1);
-    if (g->pretty) yajl_buf_append(g->buf, "\n", 1);
+    INSERT_EOL;
     FINAL_NEWLINE;
     return yajl_gen_status_ok;
 }
@@ -238,11 +297,43 @@ yajl_gen_status
 yajl_gen_array_close(yajl_gen g)
 {
     ENSURE_VALID_STATE;
-    if (g->pretty) yajl_buf_append(g->buf, "\n", 1);
+    INSERT_EOL;
     (g->depth)--;
     APPENDED_ATOM;
     INSERT_WHITESPACE;
     yajl_buf_append(g->buf, "]", 1);
+    FINAL_NEWLINE;
+    return yajl_gen_status_ok;
+}
+
+yajl_gen_status
+yajl_gen_c_comment(yajl_gen g, const unsigned char * str,
+                unsigned int len, int dlytoeol)
+{
+    ENSURE_VALID_STATE;
+	if (dlytoeol) {
+		yajl_insert_pending_comment(g, str, len, 0);
+	} else {
+		if (g->pretty)
+			yajl_buf_append(g->buf, " /*", 3);
+		else
+			yajl_buf_append(g->buf, "/*", 2);
+		yajl_string_encode(g->buf, str, len);
+		if (g->pretty)
+			yajl_buf_append(g->buf, "*/ ", 3);
+		else
+			yajl_buf_append(g->buf, "*/", 2);
+	}
+    FINAL_NEWLINE;
+    return yajl_gen_status_ok;
+}
+
+yajl_gen_status
+yajl_gen_cpp_comment(yajl_gen g, const unsigned char * str,
+                unsigned int len)
+{
+    ENSURE_VALID_STATE;
+	yajl_insert_pending_comment(g, str, len, 1);
     FINAL_NEWLINE;
     return yajl_gen_status_ok;
 }

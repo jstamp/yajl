@@ -78,11 +78,13 @@ extern "C" {
     typedef struct {
         int (* yajl_null)(void * ctx);
         int (* yajl_boolean)(void * ctx, int boolVal);
-        int (* yajl_integer)(void * ctx, long long integerVal);
+        int (* yajl_integer)(void * ctx, longlong integerVal);
         int (* yajl_double)(void * ctx, double doubleVal);
         /** strings are returned as pointers into the JSON text when,
          * possible, as a result, they are _not_ null padded */
         int (* yajl_string)(void * ctx, const unsigned char * stringVal,
+                            unsigned int stringLen);
+        int (* yajl_comment)(void * ctx, const unsigned char * stringVal,
                             unsigned int stringLen);
 
         int (* yajl_start_map)(void * ctx);

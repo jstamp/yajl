@@ -55,8 +55,10 @@ typedef enum {
     yajl_tok_string,
     yajl_tok_string_with_escapes,
 
-    /* comment tokens are not currently returned to the parser, ever */
-    yajl_tok_comment
+    /* we return the two types of comment tokens as well */
+    yajl_tok_c_comment,
+    yajl_tok_cpp_comment
+
 } yajl_tok;
 
 typedef struct yajl_lexer_t * yajl_lexer;
