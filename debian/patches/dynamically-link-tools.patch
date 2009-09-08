@@ -1,3 +1,5 @@
+Upstream statically links json_verify and json_reformat to libyajl.  This lets
+us link the tools to the shared lib. (Closes #544721)
 --- a/reformatter/CMakeLists.txt
 +++ b/reformatter/CMakeLists.txt
 @@ -42,7 +42,7 @@
