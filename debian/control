@@ -9,7 +9,6 @@ Vcs-Browser: http://github.com/jstamp/yajl
 Vcs-Git: git://github.com/jstamp/yajl.git
 
 Package: libyajl1
-Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Yet Another JSON Library
