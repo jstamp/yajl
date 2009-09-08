@@ -1,0 +1,22 @@
+--- a/reformatter/CMakeLists.txt
++++ b/reformatter/CMakeLists.txt
+@@ -42,7 +42,7 @@
+ 
+ ADD_EXECUTABLE(json_reformat ${SRCS})
+ 
+-TARGET_LINK_LIBRARIES(json_reformat yajl_s)
++TARGET_LINK_LIBRARIES(json_reformat yajl)
+ 
+ # copy the binary into the output directory
+ GET_TARGET_PROPERTY(binPath json_reformat LOCATION)
+--- a/verify/CMakeLists.txt
++++ b/verify/CMakeLists.txt
+@@ -42,7 +42,7 @@
+ 
+ ADD_EXECUTABLE(json_verify ${SRCS})
+ 
+-TARGET_LINK_LIBRARIES(json_verify yajl_s)
++TARGET_LINK_LIBRARIES(json_verify yajl)
+ 
+ # copy in the binary
+ GET_TARGET_PROPERTY(binPath json_verify LOCATION)

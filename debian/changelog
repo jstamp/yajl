@@ -2,6 +2,7 @@ yajl (1.0.5.dfsg-2) UNRELEASED; urgency=low
 
   * Bump Standards-Version to 3.8.3.  No changes needed.
   * Add README.source
+  * Dynamically link the tools to the lib (Closes: #544721)
 
  -- John Stamp <jstamp@users.sourceforge.net>  Tue, 08 Sep 2009 08:53:26 -0700
 

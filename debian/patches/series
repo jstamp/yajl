@@ -1,2 +1,3 @@
 non-pic-static-lib.patch
 relaxed-integer-tests.patch
+dynamically-link-tools.patch
