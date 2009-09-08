@@ -13,16 +13,18 @@ Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Yet Another JSON Library
- A small, fast library for parsing JavaScript Object Notation (JSON) data
- streams.
+ A small, fast library for parsing JavaScript Object Notation (JSON).  It
+ supports incremental parsing from a stream and leaves data representation to
+ higher level code.
 
 Package: libyajl-dev
 Section: libdevel
 Architecture: any
 Depends: libyajl1 (= ${binary:Version})
 Description: Yet Another JSON Library - development files
- A small, fast library for parsing JavaScript Object Notation (JSON) data
- streams.
+ A small, fast library for parsing JavaScript Object Notation (JSON).  It
+ supports incremental parsing from a stream and leaves data representation to
+ higher level code.
  .
  This package contains the header files and static libraries needed for
  compiling software that uses the yajl library.
@@ -31,8 +33,9 @@ Package: libyajl-doc
 Architecture: all
 Section: doc
 Description: Yet Another JSON Library - library documentation
- A small, fast library for parsing JavaScript Object Notation (JSON) data
- streams.
+ A small, fast library for parsing JavaScript Object Notation (JSON).  It
+ supports incremental parsing from a stream and leaves data representation to
+ higher level code.
  .
  This package contains the API documentation.
 
@@ -41,8 +44,9 @@ Architecture: any
 Section: debug
 Depends: libyajl1 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
 Description: Yet Another JSON Library - debugging symbols
- A small, fast library for parsing JavaScript Object Notation (JSON) data
- streams.
+ A small, fast library for parsing JavaScript Object Notation (JSON).  It
+ supports incremental parsing from a stream and leaves data representation to
+ higher level code.
  .
  This package contains the debugging symbols for libyajl1.
 
