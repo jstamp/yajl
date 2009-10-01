@@ -1,3 +1,9 @@
+yajl (1.0.6+git20090925-1) UNRELEASED; urgency=low
+
+  * New upstream
+
+ -- John Stamp <jstamp@users.sourceforge.net>  Thu, 01 Oct 2009 11:55:09 -0700
+
 yajl (1.0.5.dfsg-2) unstable; urgency=low
 
   * Bump Standards-Version to 3.8.3.  No changes needed.
