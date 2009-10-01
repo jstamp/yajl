@@ -120,7 +120,8 @@ static yajl_callbacks callbacks = {
 static void
 usage(const char * progname)
 {
-    fprintf(stderr, "usage:  %s <filename>\n"
+    fprintf(stderr, "%s: reformat json from stdin\n"
+            "usage:  json_reformat [options]\n"
             "    -m minimize json rather than beautify (default)\n"
             "    -u allow invalid UTF8 inside strings during parsing\n",
             progname);
@@ -140,19 +141,28 @@ main(int argc, char ** argv)
     size_t rd;
     /* allow comments */
     yajl_parser_config cfg = { 1, 1 };
-    int done = 0;
-    
-    /* check arguments.  We expect exactly one! */
-    if (argc == 2) {
-        if (!strcmp("-m", argv[1])) {
-            conf.beautify = 0;
+    int retval = 0, done = 0;
 
-        } else if (!strcmp("-u", argv[1])) {
-            cfg.checkUTF8 = 0;
-        } else {
-            usage(argv[0]);
+    /* check arguments.*/
+    int a = 1;
+    while ((a < argc) && (argv[a][0] == '-') && (strlen(argv[a]) > 1)) {
+        int i;
+        for ( i=1; i < strlen(argv[a]); i++) {
+            switch (argv[a][i]) {
+                case 'm':
+                    conf.beautify = 0;
+                    break;
+                case 'u':
+                    cfg.checkUTF8 = 0;
+                    break;
+                default:
+                    fprintf(stderr, "unrecognized option: '%c'\n\n", argv[a][i]);
+                    usage(argv[0]);
+            }
         }
-    } else if (argc != 1) {
+        ++a;
+    }
+    if (a < argc) {
         usage(argv[0]);
     }
     
@@ -167,6 +177,7 @@ main(int argc, char ** argv)
         if (rd == 0) {
             if (!feof(stdin)) {
                 fprintf(stderr, "error on file read.\n");
+                retval = 1;
                 break;
             }
             done = 1;
@@ -184,8 +195,10 @@ main(int argc, char ** argv)
             stat != yajl_status_insufficient_data)
         {
             unsigned char * str = yajl_get_error(hand, 1, fileData, rd);
-            fprintf(stderr, (const char *) str);
+            fprintf(stderr, "%s", (const char *) str);
             yajl_free_error(hand, str);
+            retval = 1;
+            break;
         } else {
             const unsigned char * buf;
             unsigned int len;
@@ -198,5 +211,5 @@ main(int argc, char ** argv)
     yajl_gen_free(g);
     yajl_free(hand);
     
-    return 0;
+    return retval;
 }
