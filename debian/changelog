@@ -1,8 +1,11 @@
-yajl (1.0.6+git20090925-1) UNRELEASED; urgency=low
+yajl (1.0.6+git20090925-1) unstable; urgency=low
 
   * New upstream
+  * Drop README.Debian: upstream removed non-free files
+  * Drop relaxed-integer-tests.patch (merged upstream)
+  * Update manpages
 
- -- John Stamp <jstamp@users.sourceforge.net>  Thu, 01 Oct 2009 11:55:09 -0700
+ -- John Stamp <jstamp@users.sourceforge.net>  Tue, 06 Oct 2009 11:11:58 -0700
 
 yajl (1.0.5.dfsg-2) unstable; urgency=low
 
