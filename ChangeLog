@@ -1,3 +1,26 @@
+1.0.8
+     * Randall E. Barker - move dllexport defnitions so dlls with proper
+	exports can again be generated on windows 
+     * lth - add yajl_get_bytes_consumed() which allows the client to
+	determine the offset as an error, as well as determine how
+	many bytes of an input buffer were consumed.
+     * lth - fixes to keep "error offset" up to date (like when the
+	client callback returns 0)
+     * Brian Maher - allow client to specify a printing function in
+       generation
+
+1.0.7
+     * lth fix win32 build (isinf and isnan)
+
+1.0.6
+     * lth fix several compiler warnings
+     * lth fix generation of invalid json from yajl_gen_double
+	(NaN is not JSON)
+     * jstamp support for combining short options in tools
+     * jstamp exit properly on errors from tools
+     * octo test success no longer depends on integer size
+     * max fix configure --prefix 
+	
 1.0.5
      * lth several performance improvements related to function
 	inlinin'
