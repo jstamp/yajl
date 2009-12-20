@@ -1,3 +1,9 @@
+yajl (1.0.8-1) UNRELEASED; urgency=low
+
+  * New upstream
+
+ -- John Stamp <jstamp@users.sourceforge.net>  Sat, 19 Dec 2009 21:18:26 -0800
+
 yajl (1.0.6+git20090925-1) unstable; urgency=low
 
   * New upstream
