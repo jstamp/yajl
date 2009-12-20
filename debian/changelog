@@ -1,6 +1,7 @@
 yajl (1.0.8-1) UNRELEASED; urgency=low
 
   * New upstream
+  * Bump shlibs
 
  -- John Stamp <jstamp@users.sourceforge.net>  Sat, 19 Dec 2009 21:18:26 -0800
 
