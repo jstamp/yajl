@@ -1,4 +1,4 @@
-# Copyright 2007-2009, Lloyd Hilaiel.
+# Copyright 2010, Lloyd Hilaiel.
 # 
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -29,7 +29,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 SET (SRCS yajl.c yajl_lex.c yajl_parser.c yajl_buf.c
-          yajl_encode.c yajl_gen.c yajl_alloc.c)
+          yajl_encode.c yajl_gen.c yajl_alloc.c
+          yajl_version.c
+)
 SET (HDRS yajl_parser.h yajl_lex.h yajl_buf.h yajl_encode.h yajl_alloc.h)
 SET (PUB_HDRS api/yajl_parse.h api/yajl_gen.h api/yajl_common.h)
 
@@ -58,11 +60,21 @@ SET_TARGET_PROPERTIES(yajl PROPERTIES
                       SOVERSION ${YAJL_MAJOR}
                       VERSION ${YAJL_MAJOR}.${YAJL_MINOR}.${YAJL_MICRO})
 
+#### ensure a .dylib has correct absolute installation paths upon installation
+IF(APPLE)
+  MESSAGE("INSTALL_NAME_DIR: ${CMAKE_INSTALL_PREFIX}/lib")
+  SET_TARGET_PROPERTIES(yajl PROPERTIES
+                        INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+ENDIF(APPLE)
+
 #### build up an sdk as a post build step
 
 # create some directories
 FILE(MAKE_DIRECTORY ${libDir})
 FILE(MAKE_DIRECTORY ${incDir})
+
+# generate build-time source
+CONFIGURE_FILE(api/yajl_version.h.cmake ${incDir}/yajl_version.h)
 
 # copy public headers to output directory
 FOREACH (header ${PUB_HDRS})
@@ -77,8 +89,10 @@ ENDFOREACH (header ${PUB_HDRS})
 INCLUDE_DIRECTORIES(${incDir}/..)
 
 IF(NOT WIN32)
-  INSTALL(TARGETS yajl LIBRARY DESTINATION lib)
-  INSTALL(TARGETS yajl_s ARCHIVE DESTINATION lib)
-  INSTALL(DIRECTORY api/ DESTINATION include/yajl
-          FILES_MATCHING PATTERN "*.h")
+  # at build time you may specify the cmake variable LIB_SUFFIX to handle
+  # 64-bit systems which use 'lib64'
+  INSTALL(TARGETS yajl LIBRARY DESTINATION lib${LIB_SUFFIX})
+  INSTALL(TARGETS yajl_s ARCHIVE DESTINATION lib${LIB_SUFFIX})
+  INSTALL(FILES ${PUB_HDRS} DESTINATION include/yajl)
+  INSTALL(FILES ${incDir}/yajl_version.h DESTINATION include/yajl)
 ENDIF()

@@ -1,4 +1,4 @@
-# Copyright 2007-2009, Lloyd Hilaiel.
+# Copyright 2010, Lloyd Hilaiel.
 # 
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -30,11 +30,11 @@
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-PROJECT(YetAnotherJSONParser)
+PROJECT(YetAnotherJSONParser C)
 
 SET (YAJL_MAJOR 1)
 SET (YAJL_MINOR 0)
-SET (YAJL_MICRO 8)
+SET (YAJL_MICRO 12)
 
 SET (YAJL_DIST_NAME "yajl-${YAJL_MAJOR}.${YAJL_MINOR}.${YAJL_MICRO}")
 
@@ -42,7 +42,8 @@ IF (NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE "Release")
 ENDIF (NOT CMAKE_BUILD_TYPE)
 
-SET(CMAKE_C_FLAGS "-Wall")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
+
 IF (WIN32) 
   ADD_DEFINITIONS(-DWIN32)
   SET(linkFlags "/PDB:NONE /INCREMENTAL:NO /OPT:NOREF /OPT:NOICF")
@@ -61,8 +62,15 @@ IF (WIN32)
   SET(CMAKE_C_FLAGS_DEBUG "/D DEBUG /Od /Z7")
   SET(CMAKE_C_FLAGS_RELEASE "/D NDEBUG /O2")
 ELSE (WIN32)
+  IF(CMAKE_COMPILER_IS_GNUCC)
+    INCLUDE(CheckCCompilerFlag)
+    CHECK_C_COMPILER_FLAG(-fvisibility=hidden HAVE_GCC_VISIBILITY)
+    IF(HAVE_GCC_VISIBILITY)
+      SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
+    ENDIF(HAVE_GCC_VISIBILITY)
+  ENDIF(CMAKE_COMPILER_IS_GNUCC)
   SET(CMAKE_C_FLAGS
-      "${CMAKE_C_FLAGS} -fPIC -ansi -pedantic -Wpointer-arith -Wno-format-y2k -Wstrict-prototypes -Wmissing-declarations -Wnested-externs -Wextra	-Wundef -Wwrite-strings -Wold-style-definition -Wno-missing-field-initializers -Wredundant-decls -Wno-unused-parameter -Wno-sign-compare -Wmissing-prototypes")
+      "${CMAKE_C_FLAGS} -std=c99 -pedantic -Wpointer-arith -Wno-format-y2k -Wstrict-prototypes -Wmissing-declarations -Wnested-externs -Wextra	-Wundef -Wwrite-strings -Wold-style-definition -Wredundant-decls -Wno-unused-parameter -Wno-sign-compare -Wmissing-prototypes")
 
   SET(CMAKE_C_FLAGS_DEBUG "-DDEBUG -g")
   SET(CMAKE_C_FLAGS_RELEASE "-DNDEBUG -O2 -Wuninitialized")
@@ -78,6 +86,6 @@ INCLUDE(YAJLDoc.cmake)
 
 # a test target
 ADD_CUSTOM_TARGET(test
-                  ./run_tests.sh
+                  ./run_tests.sh ${CMAKE_CURRENT_BINARY_DIR}/test/yajl_test
                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test)
 

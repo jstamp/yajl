@@ -1,3 +1,29 @@
+1.0.12
+     * Conrad Irwin - Parse null bytes correctly
+     * Mirek Rusin - fix LLVM warnings
+     * gno - Don't generate numbers for keys. closes #13
+     * lth - various win32 fixes, including build documentation improvements
+     * John Stamp - Don't export private symbols.
+     * John Stamp - Install yajl_version.h, not the template.
+     * John Stamp - Don't use -fPIC for static lib.  Cmake will automatically add it for the shared.
+     * lth 0 fix paths embedded in dylib upon installation on osx.  closes #11
+
+1.0.11
+     * lth remove -Wno-missing-field-initializers for greater gcc compat (3.4.6)
+
+1.0.10
+     * Brian Maher - yajl is now buildable without a c++ compiler present
+     * Brian Maher - fix header installation on OSX with cmake 2.8.0 installed
+     * lth & vitali - allow builder to specify alternate lib directory
+	for installation (i.e. lib64) 
+     * Vitali Lovich - yajl version number now programatically accessible
+     * lth - prevent cmake from embedding rpaths in binaries.  Static linking
+	makes this unneccesary.
+
+1.0.9
+     * lth - fix inverted logic causing yajl_gen_double() to always fail on
+	win32 (thanks to Fredrik Kihlander for the report) 
+
 1.0.8
      * Randall E. Barker - move dllexport defnitions so dlls with proper
 	exports can again be generated on windows 
