@@ -4,8 +4,6 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-include /usr/share/quilt/quilt.make
-
 yajl_major = $(shell grep -E 'SET.*YAJL_MAJOR[[:space:]]+[0-9]+' CMakeLists.txt | sed 's/.*YAJL_MAJOR\s\+\([0-9]\+\).*/\1/' )
 yajl_minor = $(shell grep -E 'SET.*YAJL_MINOR[[:space:]]+[0-9]+' CMakeLists.txt | sed 's/.*YAJL_MINOR\s\+\([0-9]\+\).*/\1/' )
 yajl_micro = $(shell grep -E 'SET.*YAJL_MICRO[[:space:]]+[0-9]+' CMakeLists.txt | sed 's/.*YAJL_MICRO\s\+\([0-9]\+\).*/\1/' )
@@ -16,7 +14,7 @@ yajl_dir = yajl-$(yajl_major).$(yajl_minor).$(yajl_micro)
 export DH_OPTIONS
 
 
-configure: patch config-stamp
+configure: config-stamp
 config-stamp:
 	dh_testdir
 	mkdir -p build
@@ -44,7 +42,7 @@ build-indep-stamp:  configure
 	$(MAKE) -C build doc
 	touch $@
 
-clean: unpatch
+clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-arch-stamp build-indep-stamp
