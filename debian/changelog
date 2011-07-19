@@ -1,4 +1,4 @@
-yajl (1.0.12-1) UNRELEASED; urgency=low
+yajl (1.0.12-1) unstable; urgency=low
 
   * New upstream
   * Remove non-pic-static-lib.patch. Applied upstream.
@@ -8,7 +8,7 @@ yajl (1.0.12-1) UNRELEASED; urgency=low
   * Add libyajl1.symbols file
   * Transition to multiarch
 
- -- John Stamp <jstamp@users.sourceforge.net>  Sun, 17 Jul 2011 18:45:15 -0700
+ -- John Stamp <jstamp@users.sourceforge.net>  Tue, 19 Jul 2011 10:55:54 -0700
 
 yajl (1.0.8-1) unstable; urgency=low
 
