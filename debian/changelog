@@ -1,6 +1,12 @@
 yajl (1.0.12-1) UNRELEASED; urgency=low
 
   * New upstream
+  * Remove non-pic-static-lib.patch. Applied upstream.
+  * Add misc:Depends to dev and doc packages
+  * Use source format 3.0 (quilt)
+  * Bump Standards-Version to 3.9.2. No changes needed.
+  * Add libyajl1.symbols file
+  * Transition to multiarch
 
  -- John Stamp <jstamp@users.sourceforge.net>  Sun, 17 Jul 2011 18:45:15 -0700
 
