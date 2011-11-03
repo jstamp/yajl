@@ -2,7 +2,7 @@ Source: yajl
 Section: libs
 Priority: extra
 Maintainer: John Stamp <jstamp@users.sourceforge.net>
-Build-Depends: debhelper (>= 8.1.3), cmake, doxygen
+Build-Depends: dpkg-dev (>= 1.16.1~), debhelper (>= 8.1.3), cmake, doxygen
 Standards-Version: 3.9.2
 Homepage: http://lloyd.github.com/yajl/
 Vcs-Browser: http://github.com/jstamp/yajl
