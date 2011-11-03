@@ -21,7 +21,7 @@ config-stamp:
 	cd build && cmake .. -DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_SKIP_RPATH=ON \
-		-DMULTIARCH_TUPLE=`dpkg-architecture -qDEB_HOST_MULTIARCH`
+		-DMULTIARCH_TUPLE=`dpkg-architecture -qDEB_HOST_MULTIARCH` \
 		-DCMAKE_VERBOSE_MAKEFILE=ON
 	touch $@
 
