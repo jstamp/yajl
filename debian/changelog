@@ -1,6 +1,9 @@
 yajl (1.0.12-2) UNRELEASED; urgency=low
 
   * Fix missing backslash that prevented verbose makefiles (Closes: #647445)
+  * Use the default build flags from dpkg-buildflags
+  * Revert debian/compat to 7
+  * Update upstream's copyright date in debian/copyright
 
  -- John Stamp <jstamp@users.sourceforge.net>  Wed, 02 Nov 2011 19:31:53 -0700
 
