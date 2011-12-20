@@ -2,7 +2,7 @@ Upstream statically links json_verify and json_reformat to libyajl.  This lets
 us link the tools to the shared lib. (Closes #544721)
 --- a/reformatter/CMakeLists.txt
 +++ b/reformatter/CMakeLists.txt
-@@ -42,7 +42,7 @@
+@@ -26,7 +26,7 @@
  
  ADD_EXECUTABLE(json_reformat ${SRCS})
  
@@ -13,7 +13,7 @@ us link the tools to the shared lib. (Closes #544721)
  GET_TARGET_PROPERTY(binPath json_reformat LOCATION)
 --- a/verify/CMakeLists.txt
 +++ b/verify/CMakeLists.txt
-@@ -42,7 +42,7 @@
+@@ -26,7 +26,7 @@
  
  ADD_EXECUTABLE(json_verify ${SRCS})
  
