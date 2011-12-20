@@ -2,7 +2,7 @@ Support installation of multiarch binaries.
 Define MULTIARCH_TUPLE at config time.
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -78,8 +78,8 @@
+@@ -78,9 +78,9 @@
  IF(NOT WIN32)
    # at build time you may specify the cmake variable LIB_SUFFIX to handle
    # 64-bit systems which use 'lib64'
@@ -12,4 +12,15 @@ Define MULTIARCH_TUPLE at config time.
 +  INSTALL(TARGETS yajl_s ARCHIVE DESTINATION lib/${MULTIARCH_TUPLE})
    INSTALL(FILES ${PUB_HDRS} DESTINATION include/yajl)
    INSTALL(FILES ${incDir}/yajl_version.h DESTINATION include/yajl)
-   INSTALL(FILES ${shareDir}/yajl.pc DESTINATION share/pkgconfig)
+-  INSTALL(FILES ${shareDir}/yajl.pc DESTINATION share/pkgconfig)
++  INSTALL(FILES ${shareDir}/yajl.pc DESTINATION lib/${MULTIARCH_TUPLE}/pkgconfig)
+ ENDIF()
+--- a/src/yajl.pc.cmake
++++ b/src/yajl.pc.cmake
+@@ -1,5 +1,5 @@
+ prefix=${CMAKE_INSTALL_PREFIX}
+-libdir=${dollar}{prefix}/lib${LIB_SUFFIX}
++libdir=${dollar}{prefix}/lib/${MULTIARCH_TUPLE}
+ includedir=${dollar}{prefix}/include/yajl
+ 
+ Name: Yet Another JSON Library
