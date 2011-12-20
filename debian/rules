@@ -79,7 +79,7 @@ install-arch:
 	cd build && DESTDIR=$(CURDIR)/debian/tmp $(MAKE) install
 
 	dh_install -s
-	dh_strip -s --dbg-package=libyajl1-dbg -Nyajl-tools
+	dh_strip -s --dbg-package=libyajl2-dbg -Nyajl-tools
 	dh_strip -s -pyajl-tools
 
 # Must not depend on anything. This is to be called by

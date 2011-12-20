@@ -8,7 +8,7 @@ Homepage: http://lloyd.github.com/yajl/
 Vcs-Browser: http://github.com/jstamp/yajl
 Vcs-Git: git://github.com/jstamp/yajl.git
 
-Package: libyajl1
+Package: libyajl2
 Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -20,7 +20,7 @@ Description: Yet Another JSON Library
 Package: libyajl-dev
 Section: libdevel
 Architecture: any
-Depends: libyajl1 (= ${binary:Version}), ${misc:Depends}
+Depends: libyajl2 (= ${binary:Version}), ${misc:Depends}
 Description: Yet Another JSON Library - development files
  A small, fast library for parsing JavaScript Object Notation (JSON).  It
  supports incremental parsing from a stream and leaves data representation to
@@ -40,16 +40,16 @@ Description: Yet Another JSON Library - library documentation
  .
  This package contains the API documentation.
 
-Package: libyajl1-dbg
+Package: libyajl2-dbg
 Architecture: any
 Section: debug
-Depends: libyajl1 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Depends: libyajl2 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
 Description: Yet Another JSON Library - debugging symbols
  A small, fast library for parsing JavaScript Object Notation (JSON).  It
  supports incremental parsing from a stream and leaves data representation to
  higher level code.
  .
- This package contains the debugging symbols for libyajl1.
+ This package contains the debugging symbols for libyajl2.
 
 Package: yajl-tools
 Architecture: any
