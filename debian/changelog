@@ -1,6 +1,6 @@
 yajl (2.0.4-1) UNRELEASED; urgency=low
 
-  * New upstream
+  * New upstream (Closes: #634176)
 
  -- John Stamp <jstamp@users.sourceforge.net>  Tue, 20 Dec 2011 11:14:44 -0800
 
