@@ -1,4 +1,4 @@
-yajl (2.0.4-1) UNRELEASED; urgency=low
+yajl (2.0.4-1) experimental; urgency=low
 
   * New upstream (Closes: #634176)
     - Relicenced under ISC license terms
@@ -6,7 +6,7 @@ yajl (2.0.4-1) UNRELEASED; urgency=low
   * Update symbols file
   * Update man page for json_reformat
 
- -- John Stamp <jstamp@users.sourceforge.net>  Tue, 20 Dec 2011 11:14:44 -0800
+ -- John Stamp <jstamp@users.sourceforge.net>  Wed, 21 Dec 2011 17:07:23 -0800
 
 yajl (1.0.12-2) unstable; urgency=low
 
