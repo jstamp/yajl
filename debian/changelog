@@ -1,3 +1,9 @@
+yajl (2.0.4-2) unstable; urgency=low
+
+  * Upload to unstable.
+
+ -- John Stamp <jstamp@users.sourceforge.net>  Thu, 26 Jan 2012 17:47:08 -0800
+
 yajl (2.0.4-1) experimental; urgency=low
 
   * New upstream (Closes: #634176)
