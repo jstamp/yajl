@@ -6,6 +6,9 @@ yajl (2.0.4-3) UNRELEASED; urgency=low
   * Bump debhelper compat to version 9
   * Rewrite debian/rules using tiny dh style.
   * Bump Standards-Version to 3.9.4.  No further changes needed.
+  * Support for cross-compilation (Closes: #702357)
+    - Adapt Ian Campbell's patch to use CMakeCross toolchain file when cross
+      compiling.
 
  -- John Stamp <jstamp@users.sourceforge.net>  Mon, 03 Jun 2013 10:22:11 -0700
 
