@@ -1,4 +1,4 @@
-yajl (2.0.4-3) UNRELEASED; urgency=low
+yajl (2.0.4-3) unstable; urgency=low
 
   * Add missing Multi-Arch field for libyajl2 and libyajl2-dbg
     (Closes: #697380)
@@ -10,7 +10,7 @@ yajl (2.0.4-3) UNRELEASED; urgency=low
     - Adapt Ian Campbell's patch to use CMakeCross toolchain file when cross
       compiling.
 
- -- John Stamp <jstamp@users.sourceforge.net>  Mon, 03 Jun 2013 10:22:11 -0700
+ -- John Stamp <jstamp@users.sourceforge.net>  Tue, 04 Jun 2013 09:51:24 -0700
 
 yajl (2.0.4-2) unstable; urgency=low
 
