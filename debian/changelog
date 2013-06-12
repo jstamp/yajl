@@ -2,6 +2,7 @@ yajl (2.0.4-4) UNRELEASED; urgency=low
 
   * Fix cmake configuration to install the lib in the right path
     (Closes: #712082)
+  * Update debian/watch file.  Thanks to Bart Martens.
 
  -- John Stamp <jstamp@users.sourceforge.net>  Wed, 12 Jun 2013 13:58:24 -0700
 
