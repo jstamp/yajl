@@ -194,7 +194,7 @@ static int array_add_value (context_t *ctx,
 
     /* "context_add_value" will only call us with array values. */
     assert(YAJL_IS_ARRAY(array));
-    
+
     tmp = realloc(array->u.array.values,
                   sizeof(*(array->u.array.values)) * (array->u.array.len + 1));
     if (tmp == NULL)
@@ -456,8 +456,8 @@ yajl_val yajl_tree_get(yajl_val n, const char ** path, yajl_type type)
 {
     if (!path) return NULL;
     while (n && *path) {
-        unsigned int i;
-        int len;
+        size_t i;
+        size_t len;
 
         if (n->type != yajl_t_object) return NULL;
         len = n->u.object.len;

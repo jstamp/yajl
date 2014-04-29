@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/bin/sh
 
 ECHO=`which echo`
 
@@ -16,13 +16,13 @@ fi
 # find test binary on both platforms.  allow the caller to force a
 # particular test binary (useful for non-cmake build systems).
 if [ -z "$testBin" ]; then
-    testBin="../build/test/Release/yajl_test.exe"
+    testBin="../build/test/parsing/Release/yajl_test.exe"
     if [ ! -x $testBin ] ; then
-        testBin="../build/test/Debug/yajl_test.exe"
+        testBin="../build/test/parsing/Debug/yajl_test.exe"
         if [ ! -x $testBin ] ; then
-            testBin="../build/test/yajl_test"
+            testBin="../build/test/parsing/yajl_test"
             if [  ! -x $testBin ] ; then
-                ${ECHO} "cannot execute test binary: '$testBin'"  
+                ${ECHO} "cannot execute test binary: '$testBin'"
                 exit 1;
             fi
         fi
@@ -70,19 +70,19 @@ for file in cases/*.json ; do
     $testBin $allowPartials $allowComments $allowGarbage $allowMultiple -b $iter < $file > ${file}.test  2>&1
     diff ${DIFF_FLAGS} ${file}.gold ${file}.test > ${file}.out
     if [ $? -eq 0 ] ; then
-      if [ $iter -eq 31 ] ; then : $(( testsSucceeded += 1)) ; fi
+      if [ $iter -eq 31 ] ; then testsSucceeded=$(( $testsSucceeded + 1 )) ; fi
     else
       success="FAILURE"
       iter=32
       ${ECHO}
       cat ${file}.out
     fi
-    : $(( iter += 1 ))
+    iter=$(( iter + 1 ))
     rm ${file}.test ${file}.out
   done
 
   ${ECHO} $success
-  : $(( testsTotal += 1 ))
+  testsTotal=$(( testsTotal + 1 ))
 done
 
 ${ECHO} $testsSucceeded/$testsTotal tests successful

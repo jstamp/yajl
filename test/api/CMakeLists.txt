@@ -12,12 +12,14 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-SET (SRCS parse_config.c)
+SET (TESTS gen-extra-close.c
+)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../../${YAJL_DIST_NAME}/include)
+LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../../${YAJL_DIST_NAME}/lib)
 
-# use the library we build, duh.
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/include)
-LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/lib)
-
-ADD_EXECUTABLE(parse_config ${SRCS})
-
-TARGET_LINK_LIBRARIES(parse_config yajl_s)
+# for each test, we'll create a target, and make the api-tests target depend on it
+FOREACH (test ${TESTS})
+  GET_FILENAME_COMPONENT(testProg ${test} NAME_WE)
+  ADD_EXECUTABLE(${testProg} ${test})
+  TARGET_LINK_LIBRARIES(${testProg} yajl)
+ENDFOREACH()
