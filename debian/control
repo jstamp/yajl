@@ -21,6 +21,7 @@ Description: Yet Another JSON Library
 Package: libyajl-dev
 Section: libdevel
 Architecture: any
+Multi-Arch: same
 Depends: libyajl2 (= ${binary:Version}), ${misc:Depends}
 Description: Yet Another JSON Library - development files
  A small, fast library for parsing JavaScript Object Notation (JSON).  It

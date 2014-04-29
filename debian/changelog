@@ -10,6 +10,7 @@ yajl (2.1.0-1) UNRELEASED; urgency=medium
     - Add -fvisibility=hidden to DEB_CFLAGS_MAINT_APPEND so clang doesn't
       export extraneous symbols.
   * Bump Standards-Version to 3.9.5.  No changes needed.
+  * Mark libyajl-dev as Multi-Arch: same
 
  -- John Stamp <jstamp@users.sourceforge.net>  Mon, 28 Apr 2014 17:06:33 -0700
 
