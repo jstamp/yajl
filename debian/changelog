@@ -5,6 +5,10 @@ yajl (2.1.0-1) UNRELEASED; urgency=medium
   * Update symbols file.
   * Update manpages for json_reformat, json_verify.
   * Minor updates to debian/copyright.
+  * Clean up debian/rules
+    - Fix up variable assignments
+    - Add -fvisibility=hidden to DEB_CFLAGS_MAINT_APPEND so clang doesn't
+      export extraneous symbols.
 
  -- John Stamp <jstamp@users.sourceforge.net>  Mon, 28 Apr 2014 17:06:33 -0700
 

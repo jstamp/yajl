@@ -3,12 +3,15 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-yajl_major = $(shell grep -E 'SET.*YAJL_MAJOR[[:space:]]+[0-9]+' CMakeLists.txt | sed 's/.*YAJL_MAJOR\s\+\([0-9]\+\).*/\1/' )
-yajl_minor = $(shell grep -E 'SET.*YAJL_MINOR[[:space:]]+[0-9]+' CMakeLists.txt | sed 's/.*YAJL_MINOR\s\+\([0-9]\+\).*/\1/' )
-yajl_micro = $(shell grep -E 'SET.*YAJL_MICRO[[:space:]]+[0-9]+' CMakeLists.txt | sed 's/.*YAJL_MICRO\s\+\([0-9]\+\).*/\1/' )
-yajl_dir = yajl-$(yajl_major).$(yajl_minor).$(yajl_micro)
+yajl_major := $(shell grep -E 'SET.*YAJL_MAJOR[[:space:]]+[0-9]+' CMakeLists.txt | sed 's/.*YAJL_MAJOR\s\+\([0-9]\+\).*/\1/' )
+yajl_minor := $(shell grep -E 'SET.*YAJL_MINOR[[:space:]]+[0-9]+' CMakeLists.txt | sed 's/.*YAJL_MINOR\s\+\([0-9]\+\).*/\1/' )
+yajl_micro := $(shell grep -E 'SET.*YAJL_MICRO[[:space:]]+[0-9]+' CMakeLists.txt | sed 's/.*YAJL_MICRO\s\+\([0-9]\+\).*/\1/' )
+yajl_dir   := yajl-$(yajl_major).$(yajl_minor).$(yajl_micro)
 
-host_gnu_type = $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_HOST_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+
+# Needed if building with clang
+export DEB_CFLAGS_MAINT_APPEND = -fvisibility=hidden
 
 ifneq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
 CROSS_CONFIG := -DCMAKE_TOOLCHAIN_FILE="/etc/dpkg-cross/cmake/CMakeCross.txt"
@@ -21,13 +24,13 @@ override_dh_auto_configure:
 	dh_auto_configure -v -Scmake -- -DMULTIARCH_TUPLE=$(DEB_HOST_MULTIARCH) $(DEB_CMAKE_CUSTOM_FLAGS) $(CROSS_CONFIG)
 
 override_dh_auto_build-indep:
-	$(MAKE) -C obj-$(host_gnu_type) doc
+	$(MAKE) -C obj-$(DEB_HOST_GNU_TYPE) doc
 
 # We don't want to test the lib if we're just building docs
 override_dh_auto_test-indep: ;
 
 override_dh_auto_install-indep:
-	cp -pR obj-$(host_gnu_type)/$(yajl_dir)/share/doc/$(yajl_dir)/* debian/libyajl-doc/usr/share/doc/libyajl-doc/html
+	cp -pR obj-$(DEB_HOST_GNU_TYPE)/$(yajl_dir)/share/doc/$(yajl_dir)/* debian/libyajl-doc/usr/share/doc/libyajl-doc/html
 
 override_dh_installdocs:
 	dh_installdocs -A README TODO
