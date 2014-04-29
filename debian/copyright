@@ -1,14 +1,10 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: YAJL (Yet Another JSON Library)
-Upstream-Contact: Lloyd Hilaiel <lloyd@hilaiel.com>
+Upstream-Contact: Lloyd Hilaiel <me@lloyd.io>
 Source: http://lloyd.github.com/yajl/
 
 Files: *
-Copyright: 2007-2011 Lloyd Hilaiel <lloyd@hilaiel.com>
-License: ISC
-
-Files: example/parse_config.c
-Copyright: 2011 Lloyd Hilaiel <lloyd@hilaiel.com>
+Copyright: 2007-2014 Lloyd Hilaiel <me@lloyd.io>
 License: ISC
 
 Files: src/yajl_tree.c

@@ -4,6 +4,7 @@ yajl (2.1.0-1) UNRELEASED; urgency=medium
   * Refresh patches.
   * Update symbols file.
   * Update manpages for json_reformat, json_verify.
+  * Minor updates to debian/copyright.
 
  -- John Stamp <jstamp@users.sourceforge.net>  Mon, 28 Apr 2014 17:06:33 -0700
 
