@@ -1,3 +1,9 @@
+yajl (2.1.0-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- John Stamp <jstamp@users.sourceforge.net>  Mon, 28 Apr 2014 17:06:33 -0700
+
 yajl (2.0.4-4) unstable; urgency=low
 
   * Fix cmake configuration to install the lib in the right path
