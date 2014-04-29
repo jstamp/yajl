@@ -2,19 +2,22 @@ Support installation of multiarch binaries.
 Define MULTIARCH_TUPLE at config time.
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -78,9 +78,9 @@
- IF(NOT WIN32)
-   # at build time you may specify the cmake variable LIB_SUFFIX to handle
-   # 64-bit systems which use 'lib64'
--  INSTALL(TARGETS yajl LIBRARY DESTINATION lib${LIB_SUFFIX})
--  INSTALL(TARGETS yajl_s ARCHIVE DESTINATION lib${LIB_SUFFIX})
-+  INSTALL(TARGETS yajl LIBRARY DESTINATION lib/${MULTIARCH_TUPLE})
-+  INSTALL(TARGETS yajl_s ARCHIVE DESTINATION lib/${MULTIARCH_TUPLE})
-   INSTALL(FILES ${PUB_HDRS} DESTINATION include/yajl)
-   INSTALL(FILES ${incDir}/yajl_version.h DESTINATION include/yajl)
--  INSTALL(FILES ${shareDir}/yajl.pc DESTINATION share/pkgconfig)
-+  INSTALL(FILES ${shareDir}/yajl.pc DESTINATION lib/${MULTIARCH_TUPLE}/pkgconfig)
- ENDIF()
+@@ -78,10 +78,10 @@
+ # at build time you may specify the cmake variable LIB_SUFFIX to handle
+ # 64-bit systems which use 'lib64'
+ INSTALL(TARGETS yajl
+-        RUNTIME DESTINATION lib${LIB_SUFFIX}
+-        LIBRARY DESTINATION lib${LIB_SUFFIX}
+-        ARCHIVE DESTINATION lib${LIB_SUFFIX})
+-INSTALL(TARGETS yajl_s ARCHIVE DESTINATION lib${LIB_SUFFIX})
++        RUNTIME DESTINATION lib/${MULTIARCH_TUPLE}
++        LIBRARY DESTINATION lib/${MULTIARCH_TUPLE}
++        ARCHIVE DESTINATION lib/${MULTIARCH_TUPLE})
++INSTALL(TARGETS yajl_s ARCHIVE DESTINATION lib/${MULTIARCH_TUPLE})
+ INSTALL(FILES ${PUB_HDRS} DESTINATION include/yajl)
+ INSTALL(FILES ${incDir}/yajl_version.h DESTINATION include/yajl)
+-INSTALL(FILES ${shareDir}/yajl.pc DESTINATION share/pkgconfig)
++INSTALL(FILES ${shareDir}/yajl.pc DESTINATION lib/${MULTIARCH_TUPLE}/pkgconfig)
 --- a/src/yajl.pc.cmake
 +++ b/src/yajl.pc.cmake
 @@ -1,5 +1,5 @@
