@@ -18,6 +18,7 @@ libyajl.so.2 libyajl2 #MINVER#
  yajl_gen_map_open@Base 2.0.4
  yajl_gen_null@Base 2.0.4
  yajl_gen_number@Base 2.0.4
+ yajl_gen_reset@Base 2.1.0
  yajl_gen_string@Base 2.0.4
  yajl_get_bytes_consumed@Base 2.0.4
  yajl_get_error@Base 2.0.4
