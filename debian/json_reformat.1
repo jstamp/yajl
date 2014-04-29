@@ -1,4 +1,4 @@
-.TH JSON_REFORMAT 1 "Dec 2011" "json_reformat"
+.TH JSON_REFORMAT 1 "Apr 2014" "json_reformat"
 .SH NAME
 json_reformat
 \- A simple json reformatting tool
@@ -12,15 +12,19 @@ success (zero result) if the input file is valid, and failure (nonzero result)
 otherwise.
 .SH OPTIONS
 .TP
+\fB\-e\fR
+escape any forward slashes (for embedding in HTML)
+.TP
 \fB\-m\fR
 minimize json rather than beautify
 .TP
+\fB\-s\fR
+reformat a stream of multiple json entities
+.TP
 \fB\-u\fR
 allow invalid UTF8 inside strings during parsing
-\fB\-e\fR
-escape any forward slashes (for embedding in HTML)
 .SH AUTHORS
-Lloyd Hilaiel <lloyd@hilaiel.com>
+Lloyd Hilaiel <me@lloyd.io>
 .PP
 This manual page was written by John Stamp <jstamp@users.sourceforge.net>.
 Permission is granted to redistribute, use, and/or modify this document under
