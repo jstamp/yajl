@@ -1,4 +1,4 @@
-yajl (2.1.0-1) UNRELEASED; urgency=medium
+yajl (2.1.0-1) unstable; urgency=medium
 
   * New upstream release.
   * Refresh patches.
@@ -12,7 +12,7 @@ yajl (2.1.0-1) UNRELEASED; urgency=medium
   * Bump Standards-Version to 3.9.5.  No changes needed.
   * Mark libyajl-dev as Multi-Arch: same
 
- -- John Stamp <jstamp@users.sourceforge.net>  Mon, 28 Apr 2014 17:06:33 -0700
+ -- John Stamp <jstamp@users.sourceforge.net>  Tue, 29 Apr 2014 17:06:00 -0700
 
 yajl (2.0.4-4) unstable; urgency=low
 
