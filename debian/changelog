@@ -1,6 +1,7 @@
 yajl (2.1.0-3) UNRELEASED; urgency=medium
 
   * Use secure URI in Vcs control header.
+  * Use secure copyright file specification URI.
 
  -- Jelmer Vernooĳ <jelmer@debian.org>  Tue, 02 Oct 2018 10:11:27 +0100
 
