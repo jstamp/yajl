@@ -39,5 +39,5 @@ override_dh_compress:
 	dh_compress -Xexamples
 
 override_dh_strip:
-	dh_strip --dbg-package=libyajl2-dbg -Nyajl-tools
+	dh_strip --dbgsym-migration='libyajl2-dbg (<< 2.1.0-3~)' -Nyajl-tools
 	dh_strip -pyajl-tools

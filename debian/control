@@ -42,19 +42,6 @@ Description: Yet Another JSON Library - library documentation
  .
  This package contains the API documentation.
 
-Package: libyajl2-dbg
-Architecture: any
-Multi-Arch: same
-Section: debug
-Priority: extra
-Depends: libyajl2 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: Yet Another JSON Library - debugging symbols
- A small, fast library for parsing JavaScript Object Notation (JSON).  It
- supports incremental parsing from a stream and leaves data representation to
- higher level code.
- .
- This package contains the debugging symbols for libyajl2.
-
 Package: yajl-tools
 Architecture: any
 Section: utils
