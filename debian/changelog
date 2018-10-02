@@ -1,9 +1,14 @@
 yajl (2.1.0-3) UNRELEASED; urgency=medium
 
+  [ Jelmer Vernooĳ ]
   * Use secure URI in Vcs control header.
   * Use secure copyright file specification URI.
 
- -- Jelmer Vernooĳ <jelmer@debian.org>  Tue, 02 Oct 2018 10:11:27 +0100
+  [ John Stamp ]
+  * Bump debhelper compat to 11.
+    - Remove unneeded --parallel argument in debian/rules.
+
+ -- John Stamp <jstamp@users.sourceforge.net>  Tue, 02 Oct 2018 11:21:07 -0700
 
 yajl (2.1.0-2) unstable; urgency=medium
 

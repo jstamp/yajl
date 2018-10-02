@@ -18,7 +18,7 @@ CROSS_CONFIG := -DCMAKE_TOOLCHAIN_FILE="/etc/dpkg-cross/cmake/CMakeCross.txt"
 endif
 
 %:
-	dh $@ --parallel
+	dh $@
 
 override_dh_auto_configure:
 	dh_auto_configure -v -Scmake -- -DMULTIARCH_TUPLE=$(DEB_HOST_MULTIARCH) $(DEB_CMAKE_CUSTOM_FLAGS) $(CROSS_CONFIG)
