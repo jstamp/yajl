@@ -8,6 +8,8 @@ yajl (2.1.0-3) UNRELEASED; urgency=medium
   * Bump debhelper compat to 11.
     - Remove unneeded --parallel argument in debian/rules.
   * Transition to automatic debug packages.
+  * Bump Standards-Version to 4.2.1
+    - Add Rules-Requires-Root field, and set it to "no".
 
  -- John Stamp <jstamp@users.sourceforge.net>  Tue, 02 Oct 2018 11:21:07 -0700
 
