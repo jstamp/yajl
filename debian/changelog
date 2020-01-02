@@ -2,6 +2,8 @@ yajl (2.1.0-4) UNRELEASED; urgency=medium
 
   * Use secure URI in Homepage field.
   * Set debhelper-compat version in Build-Depends.
+  * Set upstream metadata fields: Bug-Database, Repository, Repository-
+    Browse.
 
  -- Debian Janitor <janitor@jelmer.uk>  Thu, 02 Jan 2020 04:54:05 +0000
 
