@@ -5,7 +5,7 @@ Maintainer: John Stamp <jstamp@users.sourceforge.net>
 Build-Depends: debhelper (>= 11), cmake, doxygen
 Standards-Version: 4.2.1
 Rules-Requires-Root: no
-Homepage: http://lloyd.github.com/yajl/
+Homepage: https://lloyd.github.com/yajl/
 Vcs-Browser: https://github.com/jstamp/yajl
 Vcs-Git: https://github.com/jstamp/yajl.git
 
