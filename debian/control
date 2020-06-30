@@ -36,6 +36,7 @@ Package: libyajl-doc
 Architecture: all
 Section: doc
 Depends: ${misc:Depends}
+Multi-Arch: foreign
 Description: Yet Another JSON Library - library documentation
  A small, fast library for parsing JavaScript Object Notation (JSON).  It
  supports incremental parsing from a stream and leaves data representation to

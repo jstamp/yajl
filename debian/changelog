@@ -1,3 +1,10 @@
+yajl (2.1.0-4) UNRELEASED; urgency=low
+
+  * Apply multi-arch hints.
+    + libyajl-doc: Add Multi-Arch: foreign.
+
+ -- Debian Janitor <janitor@jelmer.uk>  Tue, 30 Jun 2020 21:01:58 -0000
+
 yajl (2.1.0-3) unstable; urgency=medium
 
   [ Jelmer Vernooĳ ]
